@@ -1,0 +1,90 @@
+# stages:
+#   - build
+#   - deploy
+
+# variables:
+#   DOCKER_IMAGE: hub.nextskill.academy/nextskill/website-v2
+#   DOCKER_DRIVER: overlay2
+#   NEXT_PUBLIC_GRAPH_QL_ENDPOINT: $NEXT_PUBLIC_GRAPH_QL_ENDPOINT
+#   NEXT_PUBLIC_BACKEND_BASE_URL: $NEXT_PUBLIC_BACKEND_BASE_URL
+#   NEXT_PUBLIC_BASE_URL: $NEXT_PUBLIC_BASE_URL
+#   NEXT_PUBLIC_GOOGLE_TAG_MANAGER: $NEXT_PUBLIC_GOOGLE_TAG_MANAGER
+#   NEXT_PUBLIC_EJAZE_STORAGE_URL: $NEXT_PUBLIC_EJAZE_STORAGE_URL
+
+# before_script:
+#   - echo $DOCKER_PASS | docker login -u "$DOCKER_USER" --password-stdin hub.nextskill.academy
+
+# build-and-push:
+#   stage: build
+#   image: docker:latest
+#   services:
+#     - docker:dind
+#   only:
+#     - /^release\/.*$/
+#   script:
+#     - export SANITIZED_BRANCH=$(echo ${CI_COMMIT_REF_NAME} | sed 's/[^a-zA-Z0-9]/-/g')
+#     - docker buildx create --use
+#     - docker buildx build \
+#         --push \
+#         --build-arg NEXT_PUBLIC_GRAPH_QL_ENDPOINT=$NEXT_PUBLIC_GRAPH_QL_ENDPOINT \
+#         --build-arg NEXT_PUBLIC_BACKEND_BASE_URL=$NEXT_PUBLIC_BACKEND_BASE_URL \
+#         --build-arg NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL \
+#         --build-arg NEXT_PUBLIC_GOOGLE_TAG_MANAGER=$NEXT_PUBLIC_GOOGLE_TAG_MANAGER \
+#         --build-arg NEXT_PUBLIC_EJAZE_STORAGE_URL=$NEXT_PUBLIC_EJAZE_STORAGE_URL \
+#         -t $DOCKER_IMAGE:latest \
+#         -t $DOCKER_IMAGE:${SANITIZED_BRANCH}-${CI_PIPELINE_IID} .
+
+# deploy:
+#   stage: deploy
+#   image: alpine:latest
+#   only:
+#     - /^release\/.*$/
+#   before_script:
+#     - apk add --no-cache openssh
+#   script:
+#     - mkdir -p ~/.ssh
+#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+#     - chmod 600 ~/.ssh/id_rsa
+#     - ssh-keyscan $SERVER_SSH_HOST >> ~/.ssh/known_hosts
+#     - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@$SERVER_SSH_HOST << 'EOF'
+#         set -e
+#         cd /home/ubuntu/nextskill/monoWebsiteDev
+#         docker compose pull website
+#         docker compose up -d
+#       EOF
+
+stages:
+  - build
+
+variables:
+  DOCKER_IMAGE: hub.nextskill.academy/nextskill/website-v2
+  DOCKER_DRIVER: overlay2
+  NEXT_PUBLIC_GRAPH_QL_ENDPOINT: $NEXT_PUBLIC_GRAPH_QL_ENDPOINT
+  NEXT_PUBLIC_BACKEND_BASE_URL: $NEXT_PUBLIC_BACKEND_BASE_URL
+  NEXT_PUBLIC_BASE_URL: $NEXT_PUBLIC_BASE_URL
+  NEXT_PUBLIC_GOOGLE_TAG_MANAGER: $NEXT_PUBLIC_GOOGLE_TAG_MANAGER
+  NEXT_PUBLIC_EJAZE_STORAGE_URL: $NEXT_PUBLIC_EJAZE_STORAGE_URL
+
+before_script:
+  - echo $DOCKER_PASS | docker login -u "$DOCKER_USER" --password-stdin
+    hub.nextskill.academy
+
+build-and-push:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - /^release\/.*$/
+  script:
+    - export SANITIZED_BRANCH=$(echo ${CI_COMMIT_REF_NAME} | sed
+      's/[^a-zA-Z0-9]/-/g')
+    - docker buildx create --use
+    - docker buildx build \ --push \ --build-arg
+      NEXT_PUBLIC_GRAPH_QL_ENDPOINT=$NEXT_PUBLIC_GRAPH_QL_ENDPOINT \ --build-arg
+      NEXT_PUBLIC_BACKEND_BASE_URL=$NEXT_PUBLIC_BACKEND_BASE_URL \ --build-arg
+      NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL \ --build-arg
+      NEXT_PUBLIC_GOOGLE_TAG_MANAGER=$NEXT_PUBLIC_GOOGLE_TAG_MANAGER \
+      --build-arg NEXT_PUBLIC_EJAZE_STORAGE_URL=$NEXT_PUBLIC_EJAZE_STORAGE_URL \
+      -t $DOCKER_IMAGE:latest \ -t
+      $DOCKER_IMAGE:${SANITIZED_BRANCH}-${CI_PIPELINE_IID} .

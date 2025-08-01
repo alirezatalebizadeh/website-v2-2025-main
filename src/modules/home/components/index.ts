@@ -1,0 +1,13 @@
+export { default as Description } from './Description';
+export { default as DescriptionCard } from './DescriptionCard';
+export { default as Hero } from './Hero';
+export { default as HeroSection } from './HeroSection';
+export { default as LatestBlogs } from './LatestBlogs';
+export { default as Professors } from './Professors';
+export { default as ProfessorsCard } from './ProfessorsCard';
+export { default as SingleBlogCard } from './SingleBlogCard';
+export { default as Sponsers } from './Sponsers';
+export { default as StatisticCard } from './StatisticCard';
+export { default as Testimonials } from './Testimonials';
+export { default as TestimonialsCard } from './TestimonialsCard';
+export { default as Learning } from './Learning';
