@@ -93,10 +93,12 @@ export default function Blog() {
                     {dataComments.map((item) => (
                         <div
                             key={item.id}
-                            className='rounded-[32px] p-[32px] flex flex-col gap-5 shadow '
+                            className='rounded-[32px] p-[32px] flex flex-col justify-between gap-5 shadow '
                         >
-                            <Image src="/icon/comment.svg" alt="نظرات مشتریان" width={32} height={32} />
-                            <p className='font-xs font-medium text-[#555555]'>{item.text}</p>
+                            <div>
+                                <Image src="/icon/comment.svg" alt="نظرات مشتریان" width={32} height={32} />
+                                <p className='font-xs font-medium text-[#555555]'>{item.text}</p>
+                            </div>
                             <div className='h-[50px] flex gap-4 items-center'>
                                 <Image src={item.avatar} className='rounded-full' alt={item.name} width={48} height={48} />
                                 <div className='flex flex-col gap-1'>
