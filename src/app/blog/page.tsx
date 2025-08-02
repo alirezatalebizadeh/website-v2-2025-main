@@ -1,120 +1,148 @@
-import TopSection from '@/components/ui/blogComponent/TopSection'
-import Image from 'next/image'
-import React from 'react'
+// app/blog/page.tsx
+"use client"
 
-export default function Blog() {
-
-
-    const dataComments = [
-        {
-            id: 1,
-            text: '«از وقتی با نکست‌اسکیل آشنا شدم، نگرشم به یادگیری مارکتینگ کاملاً عوض شد. محتوایی که اینجا ارائه می‌شه نه فقط رایگانه، بلکه واقعاً کاربردیه. استادایی که دوره‌ها رو ارائه می‌دن تجربه‌ی واقعی از بازار دارن و این باعث می‌شه آموزش‌ها ملموس و واقعی باشن.',
-            name: 'رضا صادقی',
-            job: 'متخصص سئو دیجی‌کالا',
-            avatar: '/icon/Alex Rivera.svg',
-        },
-        {
-            id: 2,
-            text: 'نکست‌اسکیل فقط یه سایت آموزشی نیست، واقعاً حس می‌کنی یه جامعه‌ست. جایی که آدمایی مثل خودت دارن یاد می‌گیرن، رشد می‌کنن و بدون پرداخت هیچ هزینه‌ای دارن آینده‌شونو می‌سازن. من تو چندتا وبینار شرکت کردم و هر بار چیزهای جدیدی یاد گرفتم که توی کارم واقعاً به دردم خوردن. به نظرم کاری که این تیم داره می‌کنه، یه نوع سرمایه‌گذاری بلندمدته برای جامعه.',
-            name: 'امیر محمودی',
-            job: 'دیجیتال مارکتر اسنپ‌شاپ',
-            avatar: '/icon/Alex Rivera.svg',
-        },
-        {
-            id: 3,
-            text: 'اساتیدی که باهاشون کلاس داشتم، همشون تجربه‌ی واقعی بازار داشتن. اصلاً شبیه آموزشای تئوری دیگه نیست.',
-            name: 'علی مرادی',
-            job: 'دیجیتال مارکتینگ علی‌بابا',
-            avatar: '/icon/Alex Rivera.svg',
-        },
-        {
-            id: 4,
-            text: 'ترکیب رایگان بودن و کیفیت حرفه‌ای آموزش‌ها واقعاً قابل تحسینه. احساس می‌کنم اینجا داره یه کار مهم اتفاق می‌افته.',
-            name: 'امیر محمودی',
-            job: 'دیجیتال مارکتر اسنپ‌شاپ',
-            avatar: '/icon/Alex Rivera.svg',
-        },
-        {
-            id: 5,
-            text: 'برای کسی مثل من که اول راه یادگیری مارکتینگه، نکست‌اسکیل مثل یه مسیر مطمئن بود. مرحله‌به‌مرحله جلو رفتم.',
-            name: 'امیر محمودی',
-            job: 'دیجیتال مارکتر اسنپ‌شاپ',
-            avatar: '/icon/Alex Rivera.svg',
-        },
-        {
-            id: 6,
-            text: 'حتی از خیلی از دوره‌های پولی‌ای که قبلاً خریده بودم بهتر بود. مهم‌تر از همه، رایگان بودنش برای من یه پیام روشن داشت: اینکه آموزش باکیفیت لزوماً نباید کالای لوکس باشه.',
-            name: 'علی مرادی ',
-            job: 'دیجیتال مارکتر اسنپ‌شاپ',
-            avatar: '/icon/Alex Rivera.svg',
-        },
-    ]
+import { ArticleCard } from "@/components/ui/blogComponent/ArticleCard"
+import { ArticlePFavorietsCard } from "@/components/ui/blogComponent/ArticleFavoriesCard"
+import { FilterSidebar } from "@/components/ui/blogComponent/FilterSidebar"
+import { Offering } from "@/components/ui/blogComponent/Offering"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
 
 
+const allArticles = [
+    {
+        id: "1",
+        title: "بازاریابی در مقابل برندینگ",
+        excerpt: "فرق برندینگ و بازاریابی در چیست؟ این مقاله به بررسی تفاوت‌های مهم می‌پردازد...",
+        authorName: "علی اسفندی",
+        publishedAt: "۲ مرداد ۱۴۰۳",
+        readTime: "۴ دقیقه",
+        category: "دیجیتال مارکتینگ",
+    },
+    {
+        id: "2",
+        title: "روانشناسی رنگ‌ها در تبلیغات",
+        excerpt: "چگونه انتخاب رنگ می‌تواند احساسات مخاطب را تحت تأثیر قرار دهد؟",
+        authorName: "زهرا رضایی",
+        publishedAt: "۳ مرداد ۱۴۰۳",
+        readTime: "۳ دقیقه",
+        category: "محتوا و کپی‌رایتینگ",
+    },
+    {
+        id: "3",
+        title: "تحلیل داده در بازاریابی محتوا",
+        excerpt: "با ابزارهای تحلیل داده آشنا شوید و بازدهی محتوای خود را افزایش دهید.",
+        authorName: "سارا کریمی",
+        publishedAt: "۴ مرداد ۱۴۰۳",
+        readTime: "۵ دقیقه",
+        category: "تحلیل و داده",
+    },
+]
 
+const favoriteArticles = [
+    {
+        title: "بازاریابی محتوا چیست و چرا اهمیت دارد؟",
+        excerpt: "پایه‌ای‌ترین مفهوم مارکتینگ که هر کسب‌وکاری باید بداند",
+        author: "مصطفی کاشف‌زمانه",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۶/۲۰",
+        readTime: "۶ دقیقه مطالعه",
+    },
+    {
+        title: "نقش تجربه کاربری در افزایش فروش آنلاین",
+        excerpt: "چطور UI/UX خوب باعث تبدیل بازدیدکننده به مشتری می‌شود؟",
+        author: "علی فتحی",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۵/۱۸",
+        readTime: "۴ دقیقه مطالعه",
+    },
+    {
+        title: "۵ اشتباه رایج در استراتژی شبکه‌های اجتماعی",
+        excerpt: "چیزهایی که اکثر برندها باید فوراً اصلاح کنند",
+        author: "زهرا احمدی",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۴/۳۰",
+        readTime: "۵ دقیقه مطالعه",
+    },
+    {
+        title: "سئو تکنیکال چیست؟ راهنمای مبتدی تا پیشرفته",
+        excerpt: "از crawlability تا schema markup، همه‌چیز اینجاست",
+        author: "حسین رضایی",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۳/۱۵",
+        readTime: "۷ دقیقه مطالعه",
+    },
+    {
+        title: "تولید محتوای ویدئویی با موبایل",
+        excerpt: "با کمترین ابزار، بهترین نتیجه را بگیرید",
+        author: "فاطمه قاسمی",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۲/۱۰",
+        readTime: "۳ دقیقه مطالعه",
+    },
+    {
+        title: "راهنمای کامل ساخت لندینگ‌پیج موثر",
+        excerpt: "همه‌چیز درباره صفحات فرود که واقعا تبدیل می‌کنند",
+        author: "سینا مرادی",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۱/۲۲",
+        readTime: "۸ دقیقه مطالعه",
+    },
+    {
+        title: "ایمیل مارکتینگ مرده نیست!",
+        excerpt: "دلیل اینکه هنوز ROI بالاتری از اکثر روش‌ها دارد",
+        author: "مهدی سلطانی",
+        authorImage: "/icon/26.png",
+        publishedAt: "۱۴۰۳/۰۱/۱۰",
+        readTime: "۴ دقیقه مطالعه",
+    },
+]
+
+
+
+export default function BlogPage() {
+    const [selectedCategory, setSelectedCategory] = useState("همه")
+
+    const filteredArticles =
+        selectedCategory === "همه"
+            ? allArticles
+            : allArticles.filter((a) => a.category === selectedCategory)
 
     return (
+        <>
+            <h2 className='text text-3xl text-[#121213] font-bold text-center mt-6'>مجله نکست اسکیل</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 p-6 max-w-7xl mx-auto">
+                <main className="col-span-2 flex flex-col gap-6">
+                    <FilterSidebar selected={selectedCategory} onSelect={setSelectedCategory} />
+                    <div className="grid gap-4 grid-cols-1">
+                        {filteredArticles.map((article) => (
+                            <ArticleCard key={article.id} {...article} />
+                        ))}
+                    </div>
 
-        <div className=' px-6'>
-            <div className='my-10 max-w-[1440px] mx-auto bg-white'>
-                <TopSection title="آخرین وبینار‌ها" desc="وبینارهای مارکتینگ رایگان ما که توسط کارشناسان این حوزه ایجاد شده است، ببینید. " BtnTitle="همه وبینارها" />
-            </div>
-            <div className='my-10 max-w-[1440px] mx-auto bg-white'>
-                <TopSection title="دوره‌ها" desc="بهترین دوره‌های مارکتینگ که شامل به‌روزترین آموزش های موجود در دنیا هستند را اینجا در نکست‌اسکیل پیدا کنید. " BtnTitle="همه دوره ها" />
-            </div>
-            <div className='my-10 max-w-[1440px] mx-auto bg-white'>
-                <TopSection title="اساتید نکست‌اسکیل " desc="نکست‌اسکیل، جای افرادی است که تک‌تک کلماتشان، مسیر شما را تغییر می‌دهد! " />
-            </div>
-            <div className='my-10 max-w-[1440px] mx-auto bg-white'>
-                <TopSection
-                    title="همراه چه برند‌هایی ایستاده‌ایم"
-                    desc="ما در کنار بزرگ‌ترین برندهای ایران، به رشد و توسعه شما اهمیت می‌دهیم."
-                />
-                <div className=' relative w-full h-[200px] '>
-                    <picture>
-                        <source media="(min-width: 640px)" srcSet="/images/brands.png" />
-                        <Image
-                            src="/images/brand-mobiles.png"
-                            alt="برندهایی که با ما همکاری می‌کنند"
-                            fill
-                            className="object-contain"
-                            sizes="(min-width: 640px) 100vw, 100vw"
-                        />
-                    </picture>
-                </div>
-            </div>
+                </main>
+                <aside className="">
+                    <div className="flex flex-col gap-8">
+                        <h2 className='text text-base text-[#33CC99] font-bold text-right'>محبوب‌ترین ها</h2>
 
-            {/* //!Start Comment Section */}
-            <div className='my-10 max-w-[1440px] mx-auto bg-white'>
-                <TopSection title="از نکست‌اسکیل چه می‌گویند" desc="پشتوانه و دلگرمی نکست‌اسکیل، فقط حمایت و حس خوب از طرف شماست!" />
+                        {favoriteArticles.map((article, index) => (
+                            <ArticlePFavorietsCard key={index} {...article} />
+                        ))}
+                        <Button className="flex items-center text-[#121213] text-base max-w-fit mt-4 bg-white">
+                            <Link href="/login">مشاهده همه مطالب</Link>
+                            <ArrowLeft />
+                        </Button>
+                    </div>
 
-
-                <div className='grid grid-col-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-[64px]'>
-                    {dataComments.map((item) => (
-                        <div
-                            key={item.id}
-                            className='rounded-[32px] p-[32px] flex flex-col justify-between gap-5 shadow '
-                        >
-                            <div>
-                                <Image src="/icon/comment.svg" alt="نظرات مشتریان" width={32} height={32} />
-                                <p className='font-xs font-medium text-[#555555]'>{item.text}</p>
-                            </div>
-                            <div className='h-[50px] flex gap-4 items-center'>
-                                <Image src={item.avatar} className='rounded-full' alt={item.name} width={48} height={48} />
-                                <div className='flex flex-col gap-1'>
-                                    <h4 className='text-[#32CD99] font-bold font-sm'>{item.name}</h4>
-                                    <span className='text-2xl font-normal text-[#525253]'>{item.job}</span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-
+                    <div className="my-5">
+                        <h2 className='text text-base text-[#33CC99] font-bold text-right'>مطالب پیشنهادی ها</h2>
+                        <Offering selected={selectedCategory} onSelect={setSelectedCategory} />
+                    </div>
+                </aside>
             </div>
-            <div className='my-10 max-w-[1440px] mx-auto bg-white'>
-                <TopSection title='آخرین مطالب بلاگ' desc='مسیر یادگیری خود را از اینجا آغاز کنید!' />
-            </div>
-        </div >
+        </>
+
     )
 }

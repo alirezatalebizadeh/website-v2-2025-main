@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 
 
 
-function TopSection({ title, desc, BtnTitle }: { title: string, desc: string, BtnTitle?: string }) {
+function TopSection({ title, desc, BtnTitle }: { title: string, desc?: string, BtnTitle?: string }) {
     return (
         <div className='mt-5 flex justify-between items-start'>
             <div className="text-center sm:text-right">
