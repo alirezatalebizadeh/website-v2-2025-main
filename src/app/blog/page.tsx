@@ -131,7 +131,7 @@ export default function BlogPage() {
                             <ArticlePFavorietsCard key={index} {...article} />
                         ))}
                         <Button className="flex items-center text-[#121213] text-base max-w-fit mt-4 bg-white">
-                            <Link href="/login">مشاهده همه مطالب</Link>
+                            <Link href="/blog/favorites">مشاهده همه مطالب</Link>
                             <ArrowLeft />
                         </Button>
                     </div>

@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 
 interface ArticlePreviewProps {
     title: string
@@ -19,7 +20,9 @@ export const ArticlePFavorietsCard = ({
 }: ArticlePreviewProps) => {
     return (
         <div className="space-y-2">
-            <h2 className="text-base text-[#121213] font-bold leading-8">{title}</h2>
+            <h2 className="text-base text-[#121213] hover:underline font-bold leading-8">
+                <Link href={"/blog/4"}>{title}</Link>
+            </h2>
             <p className="text-muted-foreground text-xs text-[#525253] leading-8">{excerpt}</p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2">
                 <Image
