@@ -1,8 +1,7 @@
-// app/blog/page.tsx
 "use client"
 
 import { ArticleCard } from "@/components/ui/blogComponent/ArticleCard"
-import { ArticlePFavorietsCard } from "@/components/ui/blogComponent/ArticleFavoriesCard"
+import ArticleLeft from "@/components/ui/blogComponent/ArticleLeft"
 import { FilterSidebar } from "@/components/ui/blogComponent/FilterSidebar"
 import { Offering } from "@/components/ui/blogComponent/Offering"
 import { Button } from "@/components/ui/button"
@@ -128,7 +127,7 @@ export default function BlogPage() {
                         <h2 className='text text-base text-[#33CC99] font-bold text-right'>محبوب‌ترین ها</h2>
 
                         {favoriteArticles.map((article, index) => (
-                            <ArticlePFavorietsCard key={index} {...article} />
+                            <ArticleLeft key={index} {...article} />
                         ))}
                         <Button className="flex items-center text-[#121213] text-base max-w-fit mt-4 bg-white">
                             <Link href="/blog/favorites">مشاهده همه مطالب</Link>
